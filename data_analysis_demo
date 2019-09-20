@@ -1,0 +1,15 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# collecting data into dataframe
+df = pd.read_csv('data.csv',index_col='Date',parse_dates=True)
+
+# creating 20-day average of data feature
+df['Average'] = df['Actual'].rolling(window=20).mean()
+# using standard deviation to mark the expected high and low extremes of the value
+df['Upper'] = df['Average'] + 2*df['Actual'].rolling(window=20).std()
+df['Lower'] = df['Average'] - 2*df['Actual'].rolling(window=20).std()
+
+# plot out value
+df[['Actual','Average','Upper','Lower']].plot(figsize=(16,6))
+plt.legend(['Actual','Average','Upper','Lower'])
